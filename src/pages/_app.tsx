@@ -11,6 +11,10 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
+        <meta
+          name="google-site-verification"
+          content="hZbedw2b5L2Vq2WYpt5f2AE2jabte0HzCPxHjsZd3kI"
+        />
         <link rel="shortcut icon" href="/img/icon-512.png" />
         <link rel="apple-touch-icon" href="/img/icon-512.png" />
         <link rel="manifest" href="/manifest.json" />
