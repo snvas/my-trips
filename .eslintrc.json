@@ -26,18 +26,13 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react", "react-hooks", "prettier",
-        "@typescript-eslint"
-		
+        "react", "react-hooks", "@typescript-eslint"
     ],
     "rules": {
-		"prettier/prettier": "error",
 		"react-hooks/rules-of-hooks": "error",
 		"react-hooks/exhaustive-deps": "warn",
 		"react/prop-types": "off",
 		"react/react-in-jsx-scope": "off",
-		"@typescript-eslint/explicit-module-boundary-types": "off",
-		"arrow-body-style": "off",
-    	"prefer-arrow-callback": "off"
+		"@typescript-eslint/explicit-module-boundary-types": "off"
     }
 }
