@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://my-trips.soraianovaes.com.br
+
+# Sitemaps
+Sitemaps: https://my-trips.soraianovaes.com.br/sitemap.xml
