@@ -22,7 +22,7 @@ export default function HomeTemplate({ places }: MapProps) {
             'A simple project to show in a map the places that I went and show more informations and photos when clicked.',
           images: [
             {
-              url: 'https://my-trips.soraianovaes.br/img/hero-illustration.svg',
+              url: 'https://my-trips.soraianovaes.br/img/icon-512.png',
               width: 1280,
               height: 720,
               alt: 'My Trips'
