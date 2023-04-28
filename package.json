@@ -27,7 +27,7 @@
     "graphql": "^15.6.0",
     "graphql-request": "^3.5.0",
     "leaflet": "^1.7.1",
-    "next": "11.1.2",
+    "next": "^11.1.4",
     "next-pwa": "^5.3.1",
     "next-seo": "^4.28.0",
     "next-sitemap": "^1.6.168",
@@ -41,7 +41,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.15.0",
     "@graphql-codegen/add": "^3.1.0",
-    "@graphql-codegen/cli": "2.2.0",
+    "@graphql-codegen/cli": "^2.16.5",
     "@graphql-codegen/typescript": "2.2.2",
     "@graphql-codegen/typescript-operations": "2.1.4",
     "@testing-library/jest-dom": "^5.14.1",
