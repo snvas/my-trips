@@ -75,7 +75,7 @@ export default function PlacesTemplate({ place }: PlacesTemplateProps) {
                 width={1024}
                 height={768}
                 quality={75}
-                unoptimized
+                //unoptimized
               />
             ))}
           </S.Gallery>
