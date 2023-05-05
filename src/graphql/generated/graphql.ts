@@ -60,6 +60,7 @@ export type Asset = Node & {
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
   publishedBy?: Maybe<User>;
+  scheduledIn: Array<ScheduledOperation>;
   /** The file size */
   size?: Maybe<Scalars['Float']>;
   /** System stage field */
@@ -83,6 +84,7 @@ export type AssetCreatedAtArgs = {
 
 /** Asset system model */
 export type AssetCreatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
@@ -100,6 +102,7 @@ export type AssetGalleryPlaceArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   last?: Maybe<Scalars['Int']>;
   locales?: Maybe<Array<Locale>>;
   orderBy?: Maybe<PlaceOrderByInput>;
@@ -131,7 +134,21 @@ export type AssetPublishedAtArgs = {
 
 /** Asset system model */
 export type AssetPublishedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
+};
+
+
+/** Asset system model */
+export type AssetScheduledInArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Maybe<Array<Locale>>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<ScheduledOperationWhereInput>;
 };
 
 
@@ -143,6 +160,7 @@ export type AssetUpdatedAtArgs = {
 
 /** Asset system model */
 export type AssetUpdatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
@@ -244,16 +262,19 @@ export type AssetManyWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   createdBy?: Maybe<UserWhereInput>;
+  documentInStages_every?: Maybe<AssetWhereStageInput>;
+  documentInStages_none?: Maybe<AssetWhereStageInput>;
+  documentInStages_some?: Maybe<AssetWhereStageInput>;
   galleryPlace_every?: Maybe<PlaceWhereInput>;
   galleryPlace_none?: Maybe<PlaceWhereInput>;
   galleryPlace_some?: Maybe<PlaceWhereInput>;
@@ -263,15 +284,15 @@ export type AssetManyWhereInput = {
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
@@ -282,31 +303,34 @@ export type AssetManyWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   publishedBy?: Maybe<UserWhereInput>;
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: Maybe<Scalars['DateTime']>;
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedBy?: Maybe<UserWhereInput>;
 };
 
@@ -471,6 +495,12 @@ export type AssetUpsertWithNestedWhereUniqueInput = {
   where: AssetWhereUniqueInput;
 };
 
+/** This contains a set of filters that can be used to compare values internally */
+export type AssetWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>;
+};
+
 /** Identifies documents */
 export type AssetWhereInput = {
   /** Logical AND on all given filters. */
@@ -487,31 +517,34 @@ export type AssetWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   createdBy?: Maybe<UserWhereInput>;
+  documentInStages_every?: Maybe<AssetWhereStageInput>;
+  documentInStages_none?: Maybe<AssetWhereStageInput>;
+  documentInStages_some?: Maybe<AssetWhereStageInput>;
   fileName?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   fileName_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   fileName_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  fileName_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  fileName_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   fileName_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   fileName_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   fileName_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  fileName_not_in?: Maybe<Array<Scalars['String']>>;
+  fileName_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   fileName_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -525,15 +558,15 @@ export type AssetWhereInput = {
   /** All values ending with the given string. */
   handle_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  handle_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  handle_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   handle_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   handle_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   handle_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  handle_not_in?: Maybe<Array<Scalars['String']>>;
+  handle_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   handle_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -544,30 +577,30 @@ export type AssetWhereInput = {
   /** All values greater than or equal the given value. */
   height_gte?: Maybe<Scalars['Float']>;
   /** All values that are contained in given list. */
-  height_in?: Maybe<Array<Scalars['Float']>>;
+  height_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
   /** All values less than the given value. */
   height_lt?: Maybe<Scalars['Float']>;
   /** All values less than or equal the given value. */
   height_lte?: Maybe<Scalars['Float']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   height_not?: Maybe<Scalars['Float']>;
   /** All values that are not contained in given list. */
-  height_not_in?: Maybe<Array<Scalars['Float']>>;
+  height_not_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
   id?: Maybe<Scalars['ID']>;
   /** All values containing the given string. */
   id_contains?: Maybe<Scalars['ID']>;
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
@@ -578,15 +611,15 @@ export type AssetWhereInput = {
   /** All values ending with the given string. */
   mimeType_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  mimeType_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  mimeType_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   mimeType_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   mimeType_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   mimeType_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  mimeType_not_in?: Maybe<Array<Scalars['String']>>;
+  mimeType_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   mimeType_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -597,46 +630,49 @@ export type AssetWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   publishedBy?: Maybe<UserWhereInput>;
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>;
   size?: Maybe<Scalars['Float']>;
   /** All values greater than the given value. */
   size_gt?: Maybe<Scalars['Float']>;
   /** All values greater than or equal the given value. */
   size_gte?: Maybe<Scalars['Float']>;
   /** All values that are contained in given list. */
-  size_in?: Maybe<Array<Scalars['Float']>>;
+  size_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
   /** All values less than the given value. */
   size_lt?: Maybe<Scalars['Float']>;
   /** All values less than or equal the given value. */
   size_lte?: Maybe<Scalars['Float']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   size_not?: Maybe<Scalars['Float']>;
   /** All values that are not contained in given list. */
-  size_not_in?: Maybe<Array<Scalars['Float']>>;
+  size_not_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: Maybe<Scalars['DateTime']>;
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedBy?: Maybe<UserWhereInput>;
   width?: Maybe<Scalars['Float']>;
   /** All values greater than the given value. */
@@ -644,15 +680,29 @@ export type AssetWhereInput = {
   /** All values greater than or equal the given value. */
   width_gte?: Maybe<Scalars['Float']>;
   /** All values that are contained in given list. */
-  width_in?: Maybe<Array<Scalars['Float']>>;
+  width_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
   /** All values less than the given value. */
   width_lt?: Maybe<Scalars['Float']>;
   /** All values less than or equal the given value. */
   width_lte?: Maybe<Scalars['Float']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   width_not?: Maybe<Scalars['Float']>;
   /** All values that are not contained in given list. */
-  width_not_in?: Maybe<Array<Scalars['Float']>>;
+  width_not_in?: Maybe<Array<Maybe<Scalars['Float']>>>;
+};
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type AssetWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<AssetWhereStageInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<AssetWhereStageInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<AssetWhereStageInput>>;
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<AssetWhereComparatorInput>;
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>;
 };
 
 /** References Asset record uniquely */
@@ -818,6 +868,8 @@ export type Mutation = {
   createPage?: Maybe<Page>;
   /** Create one place */
   createPlace?: Maybe<Place>;
+  /** Create one scheduledRelease */
+  createScheduledRelease?: Maybe<ScheduledRelease>;
   /** Delete one asset from _all_ existing stages. Returns deleted document. */
   deleteAsset?: Maybe<Asset>;
   /**
@@ -845,6 +897,10 @@ export type Mutation = {
   deletePage?: Maybe<Page>;
   /** Delete one place from _all_ existing stages. Returns deleted document. */
   deletePlace?: Maybe<Place>;
+  /** Delete and return scheduled operation */
+  deleteScheduledOperation?: Maybe<ScheduledOperation>;
+  /** Delete one scheduledRelease from _all_ existing stages. Returns deleted document. */
+  deleteScheduledRelease?: Maybe<ScheduledRelease>;
   /** Publish one asset */
   publishAsset?: Maybe<Asset>;
   /**
@@ -872,6 +928,18 @@ export type Mutation = {
   publishPage?: Maybe<Page>;
   /** Publish one place */
   publishPlace?: Maybe<Place>;
+  /** Schedule to publish one asset */
+  schedulePublishAsset?: Maybe<Asset>;
+  /** Schedule to publish one page */
+  schedulePublishPage?: Maybe<Page>;
+  /** Schedule to publish one place */
+  schedulePublishPlace?: Maybe<Place>;
+  /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  scheduleUnpublishAsset?: Maybe<Asset>;
+  /** Unpublish one page from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  scheduleUnpublishPage?: Maybe<Page>;
+  /** Unpublish one place from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
+  scheduleUnpublishPlace?: Maybe<Place>;
   /** Unpublish one asset from selected stages. Unpublish either the complete document with its relations, localizations and base data or specific localizations only. */
   unpublishAsset?: Maybe<Asset>;
   /**
@@ -926,6 +994,8 @@ export type Mutation = {
   updatePage?: Maybe<Page>;
   /** Update one place */
   updatePlace?: Maybe<Place>;
+  /** Update one scheduledRelease */
+  updateScheduledRelease?: Maybe<ScheduledRelease>;
   /** Upsert one asset */
   upsertAsset?: Maybe<Asset>;
   /** Upsert one page */
@@ -947,6 +1017,11 @@ export type MutationCreatePageArgs = {
 
 export type MutationCreatePlaceArgs = {
   data: PlaceCreateInput;
+};
+
+
+export type MutationCreateScheduledReleaseArgs = {
+  data: ScheduledReleaseCreateInput;
 };
 
 
@@ -1007,6 +1082,16 @@ export type MutationDeletePageArgs = {
 
 export type MutationDeletePlaceArgs = {
   where: PlaceWhereUniqueInput;
+};
+
+
+export type MutationDeleteScheduledOperationArgs = {
+  where: ScheduledOperationWhereUniqueInput;
+};
+
+
+export type MutationDeleteScheduledReleaseArgs = {
+  where: ScheduledReleaseWhereUniqueInput;
 };
 
 
@@ -1087,6 +1172,59 @@ export type MutationPublishPageArgs = {
 
 export type MutationPublishPlaceArgs = {
   to?: Array<Stage>;
+  where: PlaceWhereUniqueInput;
+};
+
+
+export type MutationSchedulePublishAssetArgs = {
+  locales?: Maybe<Array<Locale>>;
+  publishBase?: Maybe<Scalars['Boolean']>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  releaseId?: Maybe<Scalars['String']>;
+  to?: Array<Stage>;
+  where: AssetWhereUniqueInput;
+  withDefaultLocale?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationSchedulePublishPageArgs = {
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  releaseId?: Maybe<Scalars['String']>;
+  to?: Array<Stage>;
+  where: PageWhereUniqueInput;
+};
+
+
+export type MutationSchedulePublishPlaceArgs = {
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  releaseId?: Maybe<Scalars['String']>;
+  to?: Array<Stage>;
+  where: PlaceWhereUniqueInput;
+};
+
+
+export type MutationScheduleUnpublishAssetArgs = {
+  from?: Array<Stage>;
+  locales?: Maybe<Array<Locale>>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  releaseId?: Maybe<Scalars['String']>;
+  unpublishBase?: Maybe<Scalars['Boolean']>;
+  where: AssetWhereUniqueInput;
+};
+
+
+export type MutationScheduleUnpublishPageArgs = {
+  from?: Array<Stage>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  releaseId?: Maybe<Scalars['String']>;
+  where: PageWhereUniqueInput;
+};
+
+
+export type MutationScheduleUnpublishPlaceArgs = {
+  from?: Array<Stage>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  releaseId?: Maybe<Scalars['String']>;
   where: PlaceWhereUniqueInput;
 };
 
@@ -1238,6 +1376,12 @@ export type MutationUpdatePlaceArgs = {
 };
 
 
+export type MutationUpdateScheduledReleaseArgs = {
+  data: ScheduledReleaseUpdateInput;
+  where: ScheduledReleaseWhereUniqueInput;
+};
+
+
 export type MutationUpsertAssetArgs = {
   upsert: AssetUpsertInput;
   where: AssetWhereUniqueInput;
@@ -1281,6 +1425,7 @@ export type Page = Node & {
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
   publishedBy?: Maybe<User>;
+  scheduledIn: Array<ScheduledOperation>;
   slug: Scalars['String'];
   /** System stage field */
   stage: Stage;
@@ -1292,6 +1437,7 @@ export type Page = Node & {
 
 
 export type PageCreatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
@@ -1311,11 +1457,25 @@ export type PageHistoryArgs = {
 
 
 export type PagePublishedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
 
+export type PageScheduledInArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Maybe<Array<Locale>>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<ScheduledOperationWhereInput>;
+};
+
+
 export type PageUpdatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
@@ -1398,31 +1558,34 @@ export type PageManyWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   createdBy?: Maybe<UserWhereInput>;
+  documentInStages_every?: Maybe<PageWhereStageInput>;
+  documentInStages_none?: Maybe<PageWhereStageInput>;
+  documentInStages_some?: Maybe<PageWhereStageInput>;
   heading?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   heading_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   heading_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  heading_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  heading_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   heading_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   heading_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   heading_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  heading_not_in?: Maybe<Array<Scalars['String']>>;
+  heading_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   heading_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -1433,15 +1596,15 @@ export type PageManyWhereInput = {
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
@@ -1452,31 +1615,34 @@ export type PageManyWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   publishedBy?: Maybe<UserWhereInput>;
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>;
   slug?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   slug_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   slug_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  slug_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  slug_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   slug_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   slug_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   slug_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  slug_not_in?: Maybe<Array<Scalars['String']>>;
+  slug_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   slug_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -1487,15 +1653,15 @@ export type PageManyWhereInput = {
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedBy?: Maybe<UserWhereInput>;
 };
 
@@ -1585,6 +1751,12 @@ export type PageUpsertWithNestedWhereUniqueInput = {
   where: PageWhereUniqueInput;
 };
 
+/** This contains a set of filters that can be used to compare values internally */
+export type PageWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>;
+};
+
 /** Identifies documents */
 export type PageWhereInput = {
   /** Logical AND on all given filters. */
@@ -1601,31 +1773,34 @@ export type PageWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   createdBy?: Maybe<UserWhereInput>;
+  documentInStages_every?: Maybe<PageWhereStageInput>;
+  documentInStages_none?: Maybe<PageWhereStageInput>;
+  documentInStages_some?: Maybe<PageWhereStageInput>;
   heading?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   heading_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   heading_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  heading_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  heading_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   heading_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   heading_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   heading_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  heading_not_in?: Maybe<Array<Scalars['String']>>;
+  heading_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   heading_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -1636,15 +1811,15 @@ export type PageWhereInput = {
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
@@ -1655,31 +1830,34 @@ export type PageWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   publishedBy?: Maybe<UserWhereInput>;
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>;
   slug?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   slug_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   slug_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  slug_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  slug_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   slug_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   slug_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   slug_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  slug_not_in?: Maybe<Array<Scalars['String']>>;
+  slug_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   slug_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -1690,16 +1868,30 @@ export type PageWhereInput = {
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedBy?: Maybe<UserWhereInput>;
+};
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type PageWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<PageWhereStageInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<PageWhereStageInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<PageWhereStageInput>>;
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<PageWhereComparatorInput>;
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>;
 };
 
 /** References Page record uniquely */
@@ -1728,6 +1920,7 @@ export type Place = Node & {
   publishedAt?: Maybe<Scalars['DateTime']>;
   /** User that last published this document */
   publishedBy?: Maybe<User>;
+  scheduledIn: Array<ScheduledOperation>;
   slug: Scalars['String'];
   /** System stage field */
   stage: Stage;
@@ -1739,6 +1932,7 @@ export type Place = Node & {
 
 
 export type PlaceCreatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
@@ -1754,6 +1948,7 @@ export type PlaceGalleryArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   last?: Maybe<Scalars['Int']>;
   locales?: Maybe<Array<Locale>>;
   orderBy?: Maybe<AssetOrderByInput>;
@@ -1770,11 +1965,25 @@ export type PlaceHistoryArgs = {
 
 
 export type PlacePublishedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
 
+export type PlaceScheduledInArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Maybe<Array<Locale>>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<ScheduledOperationWhereInput>;
+};
+
+
 export type PlaceUpdatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
   locales?: Maybe<Array<Locale>>;
 };
 
@@ -1844,16 +2053,19 @@ export type PlaceManyWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   createdBy?: Maybe<UserWhereInput>;
+  documentInStages_every?: Maybe<PlaceWhereStageInput>;
+  documentInStages_none?: Maybe<PlaceWhereStageInput>;
+  documentInStages_some?: Maybe<PlaceWhereStageInput>;
   gallery_every?: Maybe<AssetWhereInput>;
   gallery_none?: Maybe<AssetWhereInput>;
   gallery_some?: Maybe<AssetWhereInput>;
@@ -1863,15 +2075,15 @@ export type PlaceManyWhereInput = {
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
@@ -1882,15 +2094,15 @@ export type PlaceManyWhereInput = {
   /** All values ending with the given string. */
   name_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  name_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  name_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   name_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   name_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   name_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   name_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -1901,31 +2113,34 @@ export type PlaceManyWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   publishedBy?: Maybe<UserWhereInput>;
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>;
   slug?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   slug_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   slug_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  slug_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  slug_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   slug_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   slug_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   slug_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  slug_not_in?: Maybe<Array<Scalars['String']>>;
+  slug_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   slug_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -1936,15 +2151,15 @@ export type PlaceManyWhereInput = {
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedBy?: Maybe<UserWhereInput>;
 };
 
@@ -2036,6 +2251,12 @@ export type PlaceUpsertWithNestedWhereUniqueInput = {
   where: PlaceWhereUniqueInput;
 };
 
+/** This contains a set of filters that can be used to compare values internally */
+export type PlaceWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>;
+};
+
 /** Identifies documents */
 export type PlaceWhereInput = {
   /** Logical AND on all given filters. */
@@ -2052,16 +2273,19 @@ export type PlaceWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   createdBy?: Maybe<UserWhereInput>;
+  documentInStages_every?: Maybe<PlaceWhereStageInput>;
+  documentInStages_none?: Maybe<PlaceWhereStageInput>;
+  documentInStages_some?: Maybe<PlaceWhereStageInput>;
   gallery_every?: Maybe<AssetWhereInput>;
   gallery_none?: Maybe<AssetWhereInput>;
   gallery_some?: Maybe<AssetWhereInput>;
@@ -2071,15 +2295,15 @@ export type PlaceWhereInput = {
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
@@ -2090,15 +2314,15 @@ export type PlaceWhereInput = {
   /** All values ending with the given string. */
   name_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  name_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  name_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   name_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   name_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   name_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   name_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -2109,31 +2333,34 @@ export type PlaceWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   publishedBy?: Maybe<UserWhereInput>;
+  scheduledIn_every?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_none?: Maybe<ScheduledOperationWhereInput>;
+  scheduledIn_some?: Maybe<ScheduledOperationWhereInput>;
   slug?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   slug_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   slug_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  slug_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  slug_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   slug_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   slug_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   slug_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  slug_not_in?: Maybe<Array<Scalars['String']>>;
+  slug_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   slug_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -2144,16 +2371,30 @@ export type PlaceWhereInput = {
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedBy?: Maybe<UserWhereInput>;
+};
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type PlaceWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<PlaceWhereStageInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<PlaceWhereStageInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<PlaceWhereStageInput>>;
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<PlaceWhereComparatorInput>;
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>;
 };
 
 /** References Place record uniquely */
@@ -2197,6 +2438,18 @@ export type Query = {
   places: Array<Place>;
   /** Retrieve multiple places using the Relay connection interface */
   placesConnection: PlaceConnection;
+  /** Retrieve a single scheduledOperation */
+  scheduledOperation?: Maybe<ScheduledOperation>;
+  /** Retrieve multiple scheduledOperations */
+  scheduledOperations: Array<ScheduledOperation>;
+  /** Retrieve multiple scheduledOperations using the Relay connection interface */
+  scheduledOperationsConnection: ScheduledOperationConnection;
+  /** Retrieve a single scheduledRelease */
+  scheduledRelease?: Maybe<ScheduledRelease>;
+  /** Retrieve multiple scheduledReleases */
+  scheduledReleases: Array<ScheduledRelease>;
+  /** Retrieve multiple scheduledReleases using the Relay connection interface */
+  scheduledReleasesConnection: ScheduledReleaseConnection;
   /** Retrieve a single user */
   user?: Maybe<User>;
   /** Retrieve multiple users */
@@ -2327,6 +2580,72 @@ export type QueryPlacesConnectionArgs = {
 };
 
 
+export type QueryScheduledOperationArgs = {
+  locales?: Array<Locale>;
+  stage?: Stage;
+  where: ScheduledOperationWhereUniqueInput;
+};
+
+
+export type QueryScheduledOperationsArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: Maybe<ScheduledOperationOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: Maybe<ScheduledOperationWhereInput>;
+};
+
+
+export type QueryScheduledOperationsConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: Maybe<ScheduledOperationOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: Maybe<ScheduledOperationWhereInput>;
+};
+
+
+export type QueryScheduledReleaseArgs = {
+  locales?: Array<Locale>;
+  stage?: Stage;
+  where: ScheduledReleaseWhereUniqueInput;
+};
+
+
+export type QueryScheduledReleasesArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: Maybe<ScheduledReleaseOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: Maybe<ScheduledReleaseWhereInput>;
+};
+
+
+export type QueryScheduledReleasesConnectionArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Array<Locale>;
+  orderBy?: Maybe<ScheduledReleaseOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  stage?: Stage;
+  where?: Maybe<ScheduledReleaseWhereInput>;
+};
+
+
 export type QueryUserArgs = {
   locales?: Array<Locale>;
   stage?: Stage;
@@ -2387,6 +2706,1021 @@ export type RichText = {
   raw: Scalars['RichTextAST'];
   /** Returns plain-text contents of RichText */
   text: Scalars['String'];
+};
+
+/** Scheduled Operation system model */
+export type ScheduledOperation = Node & {
+  __typename?: 'ScheduledOperation';
+  affectedDocuments: Array<ScheduledOperationAffectedDocument>;
+  /** The time the document was created */
+  createdAt: Scalars['DateTime'];
+  /** User that created this document */
+  createdBy?: Maybe<User>;
+  /** Operation description */
+  description?: Maybe<Scalars['String']>;
+  /** Get the document in other stages */
+  documentInStages: Array<ScheduledOperation>;
+  /** Operation error message */
+  errorMessage?: Maybe<Scalars['String']>;
+  /** The unique identifier */
+  id: Scalars['ID'];
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** User that last published this document */
+  publishedBy?: Maybe<User>;
+  /** Raw operation payload including all details, this field is subject to change */
+  rawPayload: Scalars['Json'];
+  /** The release this operation is scheduled for */
+  release?: Maybe<ScheduledRelease>;
+  /** System stage field */
+  stage: Stage;
+  /** operation Status */
+  status: ScheduledOperationStatus;
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime'];
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>;
+};
+
+
+/** Scheduled Operation system model */
+export type ScheduledOperationAffectedDocumentsArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Maybe<Array<Locale>>;
+  skip?: Maybe<Scalars['Int']>;
+};
+
+
+/** Scheduled Operation system model */
+export type ScheduledOperationCreatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+
+/** Scheduled Operation system model */
+export type ScheduledOperationDocumentInStagesArgs = {
+  includeCurrent?: Scalars['Boolean'];
+  inheritLocale?: Scalars['Boolean'];
+  stages?: Array<Stage>;
+};
+
+
+/** Scheduled Operation system model */
+export type ScheduledOperationPublishedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+
+/** Scheduled Operation system model */
+export type ScheduledOperationReleaseArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+
+/** Scheduled Operation system model */
+export type ScheduledOperationUpdatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+export type ScheduledOperationAffectedDocument = Asset | Page | Place;
+
+export type ScheduledOperationConnectInput = {
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: Maybe<ConnectPositionInput>;
+  /** Document to connect */
+  where: ScheduledOperationWhereUniqueInput;
+};
+
+/** A connection to a list of items. */
+export type ScheduledOperationConnection = {
+  __typename?: 'ScheduledOperationConnection';
+  aggregate: Aggregate;
+  /** A list of edges. */
+  edges: Array<ScheduledOperationEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+export type ScheduledOperationCreateManyInlineInput = {
+  /** Connect multiple existing ScheduledOperation documents */
+  connect?: Maybe<Array<ScheduledOperationWhereUniqueInput>>;
+};
+
+export type ScheduledOperationCreateOneInlineInput = {
+  /** Connect one existing ScheduledOperation document */
+  connect?: Maybe<ScheduledOperationWhereUniqueInput>;
+};
+
+/** An edge in a connection. */
+export type ScheduledOperationEdge = {
+  __typename?: 'ScheduledOperationEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: ScheduledOperation;
+};
+
+/** Identifies documents */
+export type ScheduledOperationManyWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledOperationWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledOperationWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledOperationWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  createdBy?: Maybe<UserWhereInput>;
+  description?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  description_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  errorMessage_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  id_not?: Maybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  publishedBy?: Maybe<UserWhereInput>;
+  /** All values containing the given json path. */
+  rawPayload_json_path_exists?: Maybe<Scalars['String']>;
+  /**
+   * Recursively tries to find the provided JSON scalar value inside the field.
+   * It does use an exact match when comparing values.
+   * If you pass `null` as value the filter will be ignored.
+   * Note: This filter fails if you try to look for a non scalar JSON value!
+   */
+  rawPayload_value_recursive?: Maybe<Scalars['Json']>;
+  release?: Maybe<ScheduledReleaseWhereInput>;
+  status?: Maybe<ScheduledOperationStatus>;
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Maybe<ScheduledOperationStatus>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  status_not?: Maybe<ScheduledOperationStatus>;
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Maybe<ScheduledOperationStatus>>>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  updatedBy?: Maybe<UserWhereInput>;
+};
+
+export enum ScheduledOperationOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  ErrorMessageAsc = 'errorMessage_ASC',
+  ErrorMessageDesc = 'errorMessage_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** System Scheduled Operation Status */
+export enum ScheduledOperationStatus {
+  Canceled = 'CANCELED',
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  InProgress = 'IN_PROGRESS',
+  Pending = 'PENDING'
+}
+
+export type ScheduledOperationUpdateManyInlineInput = {
+  /** Connect multiple existing ScheduledOperation documents */
+  connect?: Maybe<Array<ScheduledOperationConnectInput>>;
+  /** Disconnect multiple ScheduledOperation documents */
+  disconnect?: Maybe<Array<ScheduledOperationWhereUniqueInput>>;
+  /** Override currently-connected documents with multiple existing ScheduledOperation documents */
+  set?: Maybe<Array<ScheduledOperationWhereUniqueInput>>;
+};
+
+export type ScheduledOperationUpdateOneInlineInput = {
+  /** Connect existing ScheduledOperation document */
+  connect?: Maybe<ScheduledOperationWhereUniqueInput>;
+  /** Disconnect currently connected ScheduledOperation document */
+  disconnect?: Maybe<Scalars['Boolean']>;
+};
+
+/** Identifies documents */
+export type ScheduledOperationWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledOperationWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledOperationWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledOperationWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  createdBy?: Maybe<UserWhereInput>;
+  description?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  description_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  errorMessage_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  id_not?: Maybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  publishedBy?: Maybe<UserWhereInput>;
+  /** All values containing the given json path. */
+  rawPayload_json_path_exists?: Maybe<Scalars['String']>;
+  /**
+   * Recursively tries to find the provided JSON scalar value inside the field.
+   * It does use an exact match when comparing values.
+   * If you pass `null` as value the filter will be ignored.
+   * Note: This filter fails if you try to look for a non scalar JSON value!
+   */
+  rawPayload_value_recursive?: Maybe<Scalars['Json']>;
+  release?: Maybe<ScheduledReleaseWhereInput>;
+  status?: Maybe<ScheduledOperationStatus>;
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Maybe<ScheduledOperationStatus>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  status_not?: Maybe<ScheduledOperationStatus>;
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Maybe<ScheduledOperationStatus>>>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  updatedBy?: Maybe<UserWhereInput>;
+};
+
+/** References ScheduledOperation record uniquely */
+export type ScheduledOperationWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>;
+};
+
+/** Scheduled Release system model */
+export type ScheduledRelease = Node & {
+  __typename?: 'ScheduledRelease';
+  /** The time the document was created */
+  createdAt: Scalars['DateTime'];
+  /** User that created this document */
+  createdBy?: Maybe<User>;
+  /** Release description */
+  description?: Maybe<Scalars['String']>;
+  /** Get the document in other stages */
+  documentInStages: Array<ScheduledRelease>;
+  /** Release error message */
+  errorMessage?: Maybe<Scalars['String']>;
+  /** The unique identifier */
+  id: Scalars['ID'];
+  /** Whether scheduled release should be run */
+  isActive: Scalars['Boolean'];
+  /** Whether scheduled release is implicit */
+  isImplicit: Scalars['Boolean'];
+  /** Operations to run with this release */
+  operations: Array<ScheduledOperation>;
+  /** The time the document was published. Null on documents in draft stage. */
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** User that last published this document */
+  publishedBy?: Maybe<User>;
+  /** Release date and time */
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  /** System stage field */
+  stage: Stage;
+  /** Release Status */
+  status: ScheduledReleaseStatus;
+  /** Release Title */
+  title?: Maybe<Scalars['String']>;
+  /** The time the document was updated */
+  updatedAt: Scalars['DateTime'];
+  /** User that last updated this document */
+  updatedBy?: Maybe<User>;
+};
+
+
+/** Scheduled Release system model */
+export type ScheduledReleaseCreatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+
+/** Scheduled Release system model */
+export type ScheduledReleaseDocumentInStagesArgs = {
+  includeCurrent?: Scalars['Boolean'];
+  inheritLocale?: Scalars['Boolean'];
+  stages?: Array<Stage>;
+};
+
+
+/** Scheduled Release system model */
+export type ScheduledReleaseOperationsArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  last?: Maybe<Scalars['Int']>;
+  locales?: Maybe<Array<Locale>>;
+  orderBy?: Maybe<ScheduledOperationOrderByInput>;
+  skip?: Maybe<Scalars['Int']>;
+  where?: Maybe<ScheduledOperationWhereInput>;
+};
+
+
+/** Scheduled Release system model */
+export type ScheduledReleasePublishedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+
+/** Scheduled Release system model */
+export type ScheduledReleaseUpdatedByArgs = {
+  forceParentLocale?: Maybe<Scalars['Boolean']>;
+  locales?: Maybe<Array<Locale>>;
+};
+
+export type ScheduledReleaseConnectInput = {
+  /** Allow to specify document position in list of connected documents, will default to appending at end of list */
+  position?: Maybe<ConnectPositionInput>;
+  /** Document to connect */
+  where: ScheduledReleaseWhereUniqueInput;
+};
+
+/** A connection to a list of items. */
+export type ScheduledReleaseConnection = {
+  __typename?: 'ScheduledReleaseConnection';
+  aggregate: Aggregate;
+  /** A list of edges. */
+  edges: Array<ScheduledReleaseEdge>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+export type ScheduledReleaseCreateInput = {
+  createdAt?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type ScheduledReleaseCreateManyInlineInput = {
+  /** Connect multiple existing ScheduledRelease documents */
+  connect?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>;
+  /** Create and connect multiple existing ScheduledRelease documents */
+  create?: Maybe<Array<ScheduledReleaseCreateInput>>;
+};
+
+export type ScheduledReleaseCreateOneInlineInput = {
+  /** Connect one existing ScheduledRelease document */
+  connect?: Maybe<ScheduledReleaseWhereUniqueInput>;
+  /** Create and connect one ScheduledRelease document */
+  create?: Maybe<ScheduledReleaseCreateInput>;
+};
+
+/** An edge in a connection. */
+export type ScheduledReleaseEdge = {
+  __typename?: 'ScheduledReleaseEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: ScheduledRelease;
+};
+
+/** Identifies documents */
+export type ScheduledReleaseManyWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledReleaseWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledReleaseWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledReleaseWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  createdBy?: Maybe<UserWhereInput>;
+  description?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  description_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  errorMessage_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  id_not?: Maybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  /** Any other value that exists and is not equal to the given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>;
+  isImplicit?: Maybe<Scalars['Boolean']>;
+  /** Any other value that exists and is not equal to the given value. */
+  isImplicit_not?: Maybe<Scalars['Boolean']>;
+  operations_every?: Maybe<ScheduledOperationWhereInput>;
+  operations_none?: Maybe<ScheduledOperationWhereInput>;
+  operations_some?: Maybe<ScheduledOperationWhereInput>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  publishedBy?: Maybe<UserWhereInput>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  releaseAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  releaseAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  releaseAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  releaseAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  releaseAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  releaseAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  releaseAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  status?: Maybe<ScheduledReleaseStatus>;
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Maybe<ScheduledReleaseStatus>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  status_not?: Maybe<ScheduledReleaseStatus>;
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Maybe<ScheduledReleaseStatus>>>;
+  title?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  title_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  title_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  title_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  title_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  title_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  title_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  title_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  title_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  title_starts_with?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  updatedBy?: Maybe<UserWhereInput>;
+};
+
+export enum ScheduledReleaseOrderByInput {
+  CreatedAtAsc = 'createdAt_ASC',
+  CreatedAtDesc = 'createdAt_DESC',
+  DescriptionAsc = 'description_ASC',
+  DescriptionDesc = 'description_DESC',
+  ErrorMessageAsc = 'errorMessage_ASC',
+  ErrorMessageDesc = 'errorMessage_DESC',
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+  IsActiveAsc = 'isActive_ASC',
+  IsActiveDesc = 'isActive_DESC',
+  IsImplicitAsc = 'isImplicit_ASC',
+  IsImplicitDesc = 'isImplicit_DESC',
+  PublishedAtAsc = 'publishedAt_ASC',
+  PublishedAtDesc = 'publishedAt_DESC',
+  ReleaseAtAsc = 'releaseAt_ASC',
+  ReleaseAtDesc = 'releaseAt_DESC',
+  StatusAsc = 'status_ASC',
+  StatusDesc = 'status_DESC',
+  TitleAsc = 'title_ASC',
+  TitleDesc = 'title_DESC',
+  UpdatedAtAsc = 'updatedAt_ASC',
+  UpdatedAtDesc = 'updatedAt_DESC'
+}
+
+/** System Scheduled Release Status */
+export enum ScheduledReleaseStatus {
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  InProgress = 'IN_PROGRESS',
+  Pending = 'PENDING'
+}
+
+export type ScheduledReleaseUpdateInput = {
+  description?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type ScheduledReleaseUpdateManyInlineInput = {
+  /** Connect multiple existing ScheduledRelease documents */
+  connect?: Maybe<Array<ScheduledReleaseConnectInput>>;
+  /** Create and connect multiple ScheduledRelease documents */
+  create?: Maybe<Array<ScheduledReleaseCreateInput>>;
+  /** Delete multiple ScheduledRelease documents */
+  delete?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>;
+  /** Disconnect multiple ScheduledRelease documents */
+  disconnect?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>;
+  /** Override currently-connected documents with multiple existing ScheduledRelease documents */
+  set?: Maybe<Array<ScheduledReleaseWhereUniqueInput>>;
+  /** Update multiple ScheduledRelease documents */
+  update?: Maybe<Array<ScheduledReleaseUpdateWithNestedWhereUniqueInput>>;
+  /** Upsert multiple ScheduledRelease documents */
+  upsert?: Maybe<Array<ScheduledReleaseUpsertWithNestedWhereUniqueInput>>;
+};
+
+export type ScheduledReleaseUpdateManyInput = {
+  description?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type ScheduledReleaseUpdateManyWithNestedWhereInput = {
+  /** Update many input */
+  data: ScheduledReleaseUpdateManyInput;
+  /** Document search */
+  where: ScheduledReleaseWhereInput;
+};
+
+export type ScheduledReleaseUpdateOneInlineInput = {
+  /** Connect existing ScheduledRelease document */
+  connect?: Maybe<ScheduledReleaseWhereUniqueInput>;
+  /** Create and connect one ScheduledRelease document */
+  create?: Maybe<ScheduledReleaseCreateInput>;
+  /** Delete currently connected ScheduledRelease document */
+  delete?: Maybe<Scalars['Boolean']>;
+  /** Disconnect currently connected ScheduledRelease document */
+  disconnect?: Maybe<Scalars['Boolean']>;
+  /** Update single ScheduledRelease document */
+  update?: Maybe<ScheduledReleaseUpdateWithNestedWhereUniqueInput>;
+  /** Upsert single ScheduledRelease document */
+  upsert?: Maybe<ScheduledReleaseUpsertWithNestedWhereUniqueInput>;
+};
+
+export type ScheduledReleaseUpdateWithNestedWhereUniqueInput = {
+  /** Document to update */
+  data: ScheduledReleaseUpdateInput;
+  /** Unique document search */
+  where: ScheduledReleaseWhereUniqueInput;
+};
+
+export type ScheduledReleaseUpsertInput = {
+  /** Create document if it didn't exist */
+  create: ScheduledReleaseCreateInput;
+  /** Update document if it exists */
+  update: ScheduledReleaseUpdateInput;
+};
+
+export type ScheduledReleaseUpsertWithNestedWhereUniqueInput = {
+  /** Upsert data */
+  data: ScheduledReleaseUpsertInput;
+  /** Unique document search */
+  where: ScheduledReleaseWhereUniqueInput;
+};
+
+/** Identifies documents */
+export type ScheduledReleaseWhereInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<ScheduledReleaseWhereInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<ScheduledReleaseWhereInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<ScheduledReleaseWhereInput>>;
+  /** Contains search across all appropriate fields. */
+  _search?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  createdAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  createdAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  createdAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  createdAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  createdAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  createdBy?: Maybe<UserWhereInput>;
+  description?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  description_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  description_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  description_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  description_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  description_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  description_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  description_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  description_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  description_starts_with?: Maybe<Scalars['String']>;
+  errorMessage?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  errorMessage_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  errorMessage_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  errorMessage_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  errorMessage_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  errorMessage_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  errorMessage_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  errorMessage_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  errorMessage_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  errorMessage_starts_with?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  /** All values containing the given string. */
+  id_contains?: Maybe<Scalars['ID']>;
+  /** All values ending with the given string. */
+  id_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are contained in given list. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  id_not?: Maybe<Scalars['ID']>;
+  /** All values not containing the given string. */
+  id_not_contains?: Maybe<Scalars['ID']>;
+  /** All values not ending with the given string */
+  id_not_ends_with?: Maybe<Scalars['ID']>;
+  /** All values that are not contained in given list. */
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** All values not starting with the given string. */
+  id_not_starts_with?: Maybe<Scalars['ID']>;
+  /** All values starting with the given string. */
+  id_starts_with?: Maybe<Scalars['ID']>;
+  isActive?: Maybe<Scalars['Boolean']>;
+  /** Any other value that exists and is not equal to the given value. */
+  isActive_not?: Maybe<Scalars['Boolean']>;
+  isImplicit?: Maybe<Scalars['Boolean']>;
+  /** Any other value that exists and is not equal to the given value. */
+  isImplicit_not?: Maybe<Scalars['Boolean']>;
+  operations_every?: Maybe<ScheduledOperationWhereInput>;
+  operations_none?: Maybe<ScheduledOperationWhereInput>;
+  operations_some?: Maybe<ScheduledOperationWhereInput>;
+  publishedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  publishedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  publishedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  publishedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  publishedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  publishedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  publishedBy?: Maybe<UserWhereInput>;
+  releaseAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  releaseAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  releaseAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  releaseAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  releaseAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  releaseAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  releaseAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  releaseAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  status?: Maybe<ScheduledReleaseStatus>;
+  /** All values that are contained in given list. */
+  status_in?: Maybe<Array<Maybe<ScheduledReleaseStatus>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  status_not?: Maybe<ScheduledReleaseStatus>;
+  /** All values that are not contained in given list. */
+  status_not_in?: Maybe<Array<Maybe<ScheduledReleaseStatus>>>;
+  title?: Maybe<Scalars['String']>;
+  /** All values containing the given string. */
+  title_contains?: Maybe<Scalars['String']>;
+  /** All values ending with the given string. */
+  title_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are contained in given list. */
+  title_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
+  title_not?: Maybe<Scalars['String']>;
+  /** All values not containing the given string. */
+  title_not_contains?: Maybe<Scalars['String']>;
+  /** All values not ending with the given string */
+  title_not_ends_with?: Maybe<Scalars['String']>;
+  /** All values that are not contained in given list. */
+  title_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** All values not starting with the given string. */
+  title_not_starts_with?: Maybe<Scalars['String']>;
+  /** All values starting with the given string. */
+  title_starts_with?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than the given value. */
+  updatedAt_gt?: Maybe<Scalars['DateTime']>;
+  /** All values greater than or equal the given value. */
+  updatedAt_gte?: Maybe<Scalars['DateTime']>;
+  /** All values that are contained in given list. */
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  /** All values less than the given value. */
+  updatedAt_lt?: Maybe<Scalars['DateTime']>;
+  /** All values less than or equal the given value. */
+  updatedAt_lte?: Maybe<Scalars['DateTime']>;
+  /** Any other value that exists and is not equal to the given value. */
+  updatedAt_not?: Maybe<Scalars['DateTime']>;
+  /** All values that are not contained in given list. */
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  updatedBy?: Maybe<UserWhereInput>;
+};
+
+/** References ScheduledRelease record uniquely */
+export type ScheduledReleaseWhereUniqueInput = {
+  id?: Maybe<Scalars['ID']>;
 };
 
 /** Stage system enumeration */
@@ -2503,59 +3837,62 @@ export type UserManyWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  documentInStages_every?: Maybe<UserWhereStageInput>;
+  documentInStages_none?: Maybe<UserWhereStageInput>;
+  documentInStages_some?: Maybe<UserWhereStageInput>;
   id?: Maybe<Scalars['ID']>;
   /** All values containing the given string. */
   id_contains?: Maybe<Scalars['ID']>;
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: Maybe<Scalars['ID']>;
   isActive?: Maybe<Scalars['Boolean']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   isActive_not?: Maybe<Scalars['Boolean']>;
   kind?: Maybe<UserKind>;
   /** All values that are contained in given list. */
-  kind_in?: Maybe<Array<UserKind>>;
-  /** All values that are not equal to given value. */
+  kind_in?: Maybe<Array<Maybe<UserKind>>>;
+  /** Any other value that exists and is not equal to the given value. */
   kind_not?: Maybe<UserKind>;
   /** All values that are not contained in given list. */
-  kind_not_in?: Maybe<Array<UserKind>>;
+  kind_not_in?: Maybe<Array<Maybe<UserKind>>>;
   name?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   name_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   name_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  name_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  name_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   name_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   name_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   name_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   name_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -2566,15 +3903,15 @@ export type UserManyWhereInput = {
   /** All values ending with the given string. */
   picture_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  picture_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  picture_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   picture_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   picture_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   picture_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  picture_not_in?: Maybe<Array<Scalars['String']>>;
+  picture_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   picture_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -2585,30 +3922,30 @@ export type UserManyWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: Maybe<Scalars['DateTime']>;
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
 };
 
 export enum UserOrderByInput {
@@ -2646,6 +3983,12 @@ export type UserUpdateOneInlineInput = {
   disconnect?: Maybe<Scalars['Boolean']>;
 };
 
+/** This contains a set of filters that can be used to compare values internally */
+export type UserWhereComparatorInput = {
+  /** This field can be used to request to check if the entry is outdated by internal comparison */
+  outdated_to?: Maybe<Scalars['Boolean']>;
+};
+
 /** Identifies documents */
 export type UserWhereInput = {
   /** Logical AND on all given filters. */
@@ -2662,59 +4005,62 @@ export type UserWhereInput = {
   /** All values greater than or equal the given value. */
   createdAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  createdAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   createdAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   createdAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   createdAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  createdAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  createdAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+  documentInStages_every?: Maybe<UserWhereStageInput>;
+  documentInStages_none?: Maybe<UserWhereStageInput>;
+  documentInStages_some?: Maybe<UserWhereStageInput>;
   id?: Maybe<Scalars['ID']>;
   /** All values containing the given string. */
   id_contains?: Maybe<Scalars['ID']>;
   /** All values ending with the given string. */
   id_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are contained in given list. */
-  id_in?: Maybe<Array<Scalars['ID']>>;
-  /** All values that are not equal to given value. */
+  id_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   id_not?: Maybe<Scalars['ID']>;
   /** All values not containing the given string. */
   id_not_contains?: Maybe<Scalars['ID']>;
   /** All values not ending with the given string */
   id_not_ends_with?: Maybe<Scalars['ID']>;
   /** All values that are not contained in given list. */
-  id_not_in?: Maybe<Array<Scalars['ID']>>;
+  id_not_in?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** All values not starting with the given string. */
   id_not_starts_with?: Maybe<Scalars['ID']>;
   /** All values starting with the given string. */
   id_starts_with?: Maybe<Scalars['ID']>;
   isActive?: Maybe<Scalars['Boolean']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   isActive_not?: Maybe<Scalars['Boolean']>;
   kind?: Maybe<UserKind>;
   /** All values that are contained in given list. */
-  kind_in?: Maybe<Array<UserKind>>;
-  /** All values that are not equal to given value. */
+  kind_in?: Maybe<Array<Maybe<UserKind>>>;
+  /** Any other value that exists and is not equal to the given value. */
   kind_not?: Maybe<UserKind>;
   /** All values that are not contained in given list. */
-  kind_not_in?: Maybe<Array<UserKind>>;
+  kind_not_in?: Maybe<Array<Maybe<UserKind>>>;
   name?: Maybe<Scalars['String']>;
   /** All values containing the given string. */
   name_contains?: Maybe<Scalars['String']>;
   /** All values ending with the given string. */
   name_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  name_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  name_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   name_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   name_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   name_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   name_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -2725,15 +4071,15 @@ export type UserWhereInput = {
   /** All values ending with the given string. */
   picture_ends_with?: Maybe<Scalars['String']>;
   /** All values that are contained in given list. */
-  picture_in?: Maybe<Array<Scalars['String']>>;
-  /** All values that are not equal to given value. */
+  picture_in?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Any other value that exists and is not equal to the given value. */
   picture_not?: Maybe<Scalars['String']>;
   /** All values not containing the given string. */
   picture_not_contains?: Maybe<Scalars['String']>;
   /** All values not ending with the given string */
   picture_not_ends_with?: Maybe<Scalars['String']>;
   /** All values that are not contained in given list. */
-  picture_not_in?: Maybe<Array<Scalars['String']>>;
+  picture_not_in?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** All values not starting with the given string. */
   picture_not_starts_with?: Maybe<Scalars['String']>;
   /** All values starting with the given string. */
@@ -2744,30 +4090,44 @@ export type UserWhereInput = {
   /** All values greater than or equal the given value. */
   publishedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  publishedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   publishedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   publishedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   publishedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  publishedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  publishedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   updatedAt?: Maybe<Scalars['DateTime']>;
   /** All values greater than the given value. */
   updatedAt_gt?: Maybe<Scalars['DateTime']>;
   /** All values greater than or equal the given value. */
   updatedAt_gte?: Maybe<Scalars['DateTime']>;
   /** All values that are contained in given list. */
-  updatedAt_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
   /** All values less than the given value. */
   updatedAt_lt?: Maybe<Scalars['DateTime']>;
   /** All values less than or equal the given value. */
   updatedAt_lte?: Maybe<Scalars['DateTime']>;
-  /** All values that are not equal to given value. */
+  /** Any other value that exists and is not equal to the given value. */
   updatedAt_not?: Maybe<Scalars['DateTime']>;
   /** All values that are not contained in given list. */
-  updatedAt_not_in?: Maybe<Array<Scalars['DateTime']>>;
+  updatedAt_not_in?: Maybe<Array<Maybe<Scalars['DateTime']>>>;
+};
+
+/** The document in stages filter allows specifying a stage entry to cross compare the same document between different stages */
+export type UserWhereStageInput = {
+  /** Logical AND on all given filters. */
+  AND?: Maybe<Array<UserWhereStageInput>>;
+  /** Logical NOT on all given filters combined by AND. */
+  NOT?: Maybe<Array<UserWhereStageInput>>;
+  /** Logical OR on all given filters. */
+  OR?: Maybe<Array<UserWhereStageInput>>;
+  /** This field contains fields which can be set as true or false to specify an internal comparison */
+  compareWithParent?: Maybe<UserWhereComparatorInput>;
+  /** Specify the stage to compare with */
+  stage?: Maybe<Stage>;
 };
 
 /** References User record uniquely */
@@ -2803,6 +4163,8 @@ export enum _FilterKind {
   Gt = 'gt',
   Gte = 'gte',
   In = 'in',
+  JsonPathExists = 'json_path_exists',
+  JsonValueRecursive = 'json_value_recursive',
   Lt = 'lt',
   Lte = 'lte',
   NotContains = 'not_contains',
@@ -2814,7 +4176,12 @@ export enum _FilterKind {
   RelationalSingle = 'relational_single',
   RelationalSome = 'relational_some',
   Search = 'search',
-  StartsWith = 'starts_with'
+  StartsWith = 'starts_with',
+  UnionEmpty = 'union_empty',
+  UnionEvery = 'union_every',
+  UnionNone = 'union_none',
+  UnionSingle = 'union_single',
+  UnionSome = 'union_some'
 }
 
 export enum _MutationInputFieldKind {
@@ -2833,6 +4200,8 @@ export enum _MutationKind {
   DeleteMany = 'deleteMany',
   Publish = 'publish',
   PublishMany = 'publishMany',
+  SchedulePublish = 'schedulePublish',
+  ScheduleUnpublish = 'scheduleUnpublish',
   Unpublish = 'unpublish',
   UnpublishMany = 'unpublishMany',
   Update = 'update',
@@ -2892,4 +4261,4 @@ export type GetPlaceBySlugQueryVariables = Exact<{
 }>;
 
 
-export type GetPlaceBySlugQuery = { __typename?: 'Query', place?: Maybe<{ __typename?: 'Place', id: string, slug: string, name: string, location: { __typename?: 'Location', latitude: number, longitude: number }, description?: Maybe<{ __typename?: 'RichText', html: string }>, gallery: Array<{ __typename?: 'Asset', url: string, height?: Maybe<number>, width?: Maybe<number> }> }> };
+export type GetPlaceBySlugQuery = { __typename?: 'Query', place?: Maybe<{ __typename?: 'Place', id: string, slug: string, name: string, location: { __typename?: 'Location', latitude: number, longitude: number }, description?: Maybe<{ __typename?: 'RichText', html: string, text: string }>, gallery: Array<{ __typename?: 'Asset', url: string, height?: Maybe<number>, width?: Maybe<number> }> }> };

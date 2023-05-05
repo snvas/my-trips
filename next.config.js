@@ -8,6 +8,6 @@ module.exports = withPWA({
     disable: !isProd
   },
   images: {
-    domains: ['media.graphcms.com']
+    domains: ['api-us-east-1.hygraph.com/v2/cktte5v1e0mei01z820dr8dip/master']
   }
 })
